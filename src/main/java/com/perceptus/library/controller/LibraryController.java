@@ -1,7 +1,9 @@
 package com.perceptus.library.controller;
 
 import com.perceptus.library.model.dto.BookDto;
+import com.perceptus.library.service.LibraryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,30 +12,31 @@ import java.util.List;
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
 public class LibraryController {
-    private final LibraryController controller;
+    private final LibraryService service;
 
     @GetMapping
-    public List<BookDto> getBooks() {
-        return controller.getBooks();
+    public ResponseEntity<List<BookDto>> getBooks() {
+        return ResponseEntity.status(200).body(service.getBooks());
     }
 
     @GetMapping(value = "/{bookId}")
-    public BookDto getBook(@PathVariable Long bookId) {
-        return controller.getBook(bookId);
+    public ResponseEntity<BookDto> getBook(@PathVariable Long bookId) {
+        return ResponseEntity.status(200).body(service.getBook(bookId));
     }
 
     @PostMapping
-    public BookDto saveBook(@RequestBody BookDto book) {
-        return controller.saveBook(book);
+    public ResponseEntity<BookDto> saveBook(@RequestBody BookDto dto) {
+        return ResponseEntity.status(200).body(service.saveBook(dto));
     }
 
     @PutMapping(value = "/bookId")
-    public BookDto updateBook(@PathVariable Long bookId) {
-        return controller.updateBook(bookId);
+    public ResponseEntity<BookDto> updateBook(@PathVariable Long bookId, @RequestBody BookDto dto) {
+        return ResponseEntity.status(200).body(service.updateBook(bookId, dto));
     }
 
     @DeleteMapping(value = "/bookId")
-    public boolean deleteBook(@PathVariable Long bookId) {
-        return controller.deleteBook(bookId);
+    public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
+        service.deleteBook(bookId);
+        return ResponseEntity.status(200).build();
     }
 }
