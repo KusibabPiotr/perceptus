@@ -1,4 +1,4 @@
-package com.perceptus.library.security;
+package com.perceptus.library.security.config;
 
 import com.perceptus.library.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
