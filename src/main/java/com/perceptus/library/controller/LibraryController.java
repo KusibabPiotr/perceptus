@@ -19,14 +19,9 @@ public class LibraryController {
         return ResponseEntity.status(200).body(service.getBooks());
     }
 
-    @GetMapping(value = "/{bookId}")
-    public ResponseEntity<BookDto> getBook(@PathVariable Long bookId) {
-        return ResponseEntity.status(200).body(service.getBook(bookId));
-    }
-
     @PostMapping
     public ResponseEntity<BookDto> saveBook(@RequestBody BookDto dto) {
-        return ResponseEntity.status(200).body(service.saveBook(dto));
+        return ResponseEntity.status(201).body(service.saveBook(dto));
     }
 
     @PutMapping(value = "/bookId")

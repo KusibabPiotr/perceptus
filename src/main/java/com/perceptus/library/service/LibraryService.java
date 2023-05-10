@@ -14,13 +14,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class LibraryService {
-    private LibraryRepository repository;
+    private final LibraryRepository repository;
     public List<BookDto> getBooks() {
         return repository.findAll().stream().map(BookMapper::mapBookToDto).toList();
-    }
-
-    public BookDto getBook(final Long bookId) {
-        return BookMapper.mapBookToDto(repository.findById(bookId).orElseThrow(BookNotFoundException::new));
     }
 
     public BookDto saveBook(final BookDto dto) {
@@ -35,7 +31,7 @@ public class LibraryService {
         return BookMapper.mapBookToDto(book);
     }
 
-    public boolean deleteBook(Long bookId) {
+    public void deleteBook(Long bookId) {
         repository.deleteById(bookId);
     }
 }
