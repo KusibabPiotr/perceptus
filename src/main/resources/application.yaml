@@ -13,10 +13,15 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create-drop #dev settings
 
 server:
   port: 8081
 
-jwt:
-  secret-key: ${SECRET_KEY}
+application:
+  security:
+    jwt:
+      secret-key: 763979244226452948404D635166546A576E5A7234753778217A25432A462D4A
+      expiration: 86400000 # a day
+      refreshToken:
+        expiration: 604800000 # 7 days
