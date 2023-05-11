@@ -1,4 +1,4 @@
-package com.perceptus.library.model.domain;
+package com.perceptus.library.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
+public class AuthenticationRequestDto {
     private String email;
     private String password;
 }

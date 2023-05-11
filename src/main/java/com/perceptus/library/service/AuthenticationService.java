@@ -1,7 +1,7 @@
 package com.perceptus.library.service;
 
 import com.perceptus.library.mapper.RegistrationRequestMapper;
-import com.perceptus.library.model.domain.AuthenticationRequest;
+import com.perceptus.library.model.dto.AuthenticationRequestDto;
 import com.perceptus.library.model.domain.AuthenticationResponse;
 import com.perceptus.library.model.domain.User;
 import com.perceptus.library.model.dto.RegisterRequestDto;
@@ -28,7 +28,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequestDto request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();

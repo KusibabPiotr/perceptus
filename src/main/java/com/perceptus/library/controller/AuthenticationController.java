@@ -1,6 +1,6 @@
 package com.perceptus.library.controller;
 
-import com.perceptus.library.model.domain.AuthenticationRequest;
+import com.perceptus.library.model.dto.AuthenticationRequestDto;
 import com.perceptus.library.model.domain.AuthenticationResponse;
 import com.perceptus.library.model.dto.RegisterRequestDto;
 import com.perceptus.library.service.AuthenticationService;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/vi/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService service;
@@ -23,7 +23,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequestDto request) {
         return ResponseEntity.ok(service.authenticate(request));
     }
 }
