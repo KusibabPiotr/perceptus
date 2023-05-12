@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,11 +28,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
+    @PreAuthorize("hasAnyRole('ADMIN','USER','MANAGER')")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequestDto request) {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
     @PostMapping("/refresh-token")
+    @PreAuthorize("hasAnyRole('ADMIN','USER','MANAGER')")
     public void refreshToken(HttpServletRequest request,
                              HttpServletResponse response) throws IOException {
         service.refreshToken(request, response);
