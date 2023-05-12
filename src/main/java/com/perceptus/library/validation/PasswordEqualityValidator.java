@@ -8,7 +8,7 @@ public class PasswordEqualityValidator {
     public void validate(final String password, final String repeatedPassword)
             throws PasswordNotMatchException {
         if (!test(password, repeatedPassword)) {
-            throw new PasswordNotMatchException("Password and repeat password fields not match!");
+            throw new PasswordNotMatchException();
         }
     }
     boolean test(final String password, final String repeatedPassword) {

@@ -13,10 +13,10 @@ public class RegistrationRequestMapper {
     private final PasswordEncoder passwordEncoder;
     public User mapRegistrationRequestToUser(final RegisterRequestDto dto) {
         return User.builder()
-                .firstname(dto.getFirstName())
-                .lastname(dto.getLastName())
-                .email(dto.getEmail())
-                .password(passwordEncoder.encode(dto.getPassword()))
+                .firstname(dto.firstName())
+                .lastname(dto.lastName())
+                .email(dto.email())
+                .password(passwordEncoder.encode(dto.password()))
                 .role(Role.USER)
                 .build();
     }

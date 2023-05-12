@@ -50,7 +50,7 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequestDto request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(),request.password()));
         User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new EmailNotFoundException("Email not found in DB."));
+                .orElseThrow(EmailNotFoundException::new);
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
