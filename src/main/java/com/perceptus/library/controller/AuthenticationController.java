@@ -6,7 +6,10 @@ import com.perceptus.library.model.dto.RegisterRequestDto;
 import com.perceptus.library.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,14 +25,14 @@ import java.io.IOException;
 public class AuthenticationController {
     private final AuthenticationService service;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequestDto request) {
+    @PostMapping(value = "/register")
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequestDto request) {
         return ResponseEntity.ok(service.register(request));
     }
 
     @PostMapping("/authenticate")
     @PreAuthorize("hasAnyRole('ADMIN','USER','MANAGER')")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequestDto request) {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid AuthenticationRequestDto request) {
         return ResponseEntity.ok(service.authenticate(request));
     }
 

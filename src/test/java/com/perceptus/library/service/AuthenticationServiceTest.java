@@ -61,7 +61,7 @@ class AuthenticationServiceTest {
     @Test
     void testRegister() {
         // Given
-        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Adam","Kacz","test@gmail.com", "password123", Role.USER);
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Adam","Kacz","test@gmail.com", "password123", "password123");
         User user = new User(1, "Adam","Kacz","test@gmail.com", "password123",Role.USER, new ArrayList<>());
         String accessToken = "accessToken";
         String refreshToken = "refreshToken";
