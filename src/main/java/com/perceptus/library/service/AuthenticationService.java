@@ -1,6 +1,7 @@
 package com.perceptus.library.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.perceptus.library.exceptions.EmailNotFoundException;
 import com.perceptus.library.mapper.RegistrationRequestMapper;
 import com.perceptus.library.model.domain.Token;
 import com.perceptus.library.model.domain.TokenType;
@@ -10,6 +11,7 @@ import com.perceptus.library.model.domain.User;
 import com.perceptus.library.model.dto.RegisterRequestDto;
 import com.perceptus.library.repository.TokenRepository;
 import com.perceptus.library.repository.UserRepository;
+import com.perceptus.library.validation.PasswordEqualityValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +32,10 @@ public class AuthenticationService {
     private final RegistrationRequestMapper mapper;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEqualityValidator validator;
 
     public AuthenticationResponse register(RegisterRequestDto request) {
+        validator.validate(request.password(), request.repeatPassword());
         User user = mapper.mapRegistrationRequestToUser(request);
         user = userRepository.save(user);
         String jwt = jwtService.generateToken(user);
@@ -44,9 +48,9 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequestDto request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(),request.password()));
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new EmailNotFoundException("Email not found in DB."));
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);

@@ -108,7 +108,7 @@ class AuthenticationServiceTest {
         when(authenticationManager.authenticate(any())).thenReturn(null);
         when(jwtService.generateToken(user)).thenReturn(accessToken);
         when(jwtService.generateToken(user)).thenReturn(refreshToken);
-        when(userRepository.findByEmail(authenticationRequestDto.getEmail())).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail(authenticationRequestDto.email())).thenReturn(Optional.of(user));
         when(jwtService.generateToken(user)).thenReturn(accessToken, refreshToken);
 
         // When
