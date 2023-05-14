@@ -24,13 +24,13 @@ public class LibraryController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('admin:create','management:create')")
     public ResponseEntity<BookDto> saveBook(@RequestBody BookDto dto) {
-        return ResponseEntity.status(201).body(service.saveBook(dto));
+        return ResponseEntity.ok(service.saveBook(dto));
     }
 
     @PutMapping("/bookId")
     @PreAuthorize("hasAnyAuthority('admin:update','management:update')")
     public ResponseEntity<BookDto> updateBook(@PathVariable Long bookId, @RequestBody BookDto dto) {
-        return ResponseEntity.status(200).body(service.updateBook(bookId, dto));
+        return ResponseEntity.ok(service.updateBook(bookId, dto));
     }
 
     @DeleteMapping("/bookId")

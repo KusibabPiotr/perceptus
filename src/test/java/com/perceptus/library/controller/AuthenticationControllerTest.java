@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -48,7 +47,6 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN", "USER", "MANAGER"})
     void testAuthenticateEndpointOk() throws Exception {
         AuthenticationResponse authenticationResponse = new AuthenticationResponse("access_token", "refresh_token");
         AuthenticationRequestDto request = new AuthenticationRequestDto("testuser", "testpassword");
@@ -61,7 +59,6 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"ADMIN", "USER", "MANAGER"})
     void testRefreshTokenEndpointOk() throws Exception {
         HttpServletRequest request = null;
         HttpServletResponse response = null;
