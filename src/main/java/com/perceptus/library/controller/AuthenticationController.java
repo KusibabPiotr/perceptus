@@ -8,8 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,18 +24,18 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping(value = "/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequestDto request) {
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid RegisterRequestDto request) {
         return ResponseEntity.ok(service.register(request));
     }
 
     @PostMapping("/authenticate")
-    @PreAuthorize("hasAnyRole('ADMIN','USER','MANAGER')")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid AuthenticationRequestDto request) {
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER','MANAGER')")
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequestDto request) {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
     @PostMapping("/refresh-token")
-    @PreAuthorize("hasAnyRole('ADMIN','USER','MANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER','MANAGER')")
     public void refreshToken(HttpServletRequest request,
                              HttpServletResponse response) throws IOException {
         service.refreshToken(request, response);

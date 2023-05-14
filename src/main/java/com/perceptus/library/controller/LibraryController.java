@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN','USER','MANAGER')")
+@PreAuthorize("hasAnyAuthority('ADMIN','USER','MANAGER')")
 public class LibraryController {
     private final LibraryService service;
 
