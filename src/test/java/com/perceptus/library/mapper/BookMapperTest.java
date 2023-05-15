@@ -3,10 +3,14 @@ package com.perceptus.library.mapper;
 import com.perceptus.library.model.domain.Book;
 import com.perceptus.library.model.dto.BookDto;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+@SpringBootTest
 class BookMapperTest {
+    @Autowired
+    private BookMapper mapper;
 
     @Test
     public void testMapDtoToBook() {
@@ -16,7 +20,7 @@ class BookMapperTest {
                 .author("Author")
                 .build();
         //when
-        Book book = BookMapper.mapDtoToBook(bookDto);
+        Book book = mapper.mapDtoToBook(bookDto);
 
         //then
         assertThat(book).isNotNull();
@@ -32,7 +36,7 @@ class BookMapperTest {
                 .author("Author")
                 .build();
         //when
-        BookDto bookDto = BookMapper.mapBookToDto(book);
+        BookDto bookDto = mapper.mapBookToDto(book);
 
         //then
         assertThat(book).isNotNull();
