@@ -14,6 +14,7 @@ import com.perceptus.library.repository.UserRepository;
 import com.perceptus.library.validation.PasswordEqualityValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,6 +35,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEqualityValidator validator;
 
+    @Transactional
     public AuthenticationResponse register(RegisterRequestDto request) {
         validator.validate(request.password(), request.repeatPassword());
         User user = mapper.mapRegistrationRequestToUser(request);
@@ -47,6 +49,7 @@ public class AuthenticationService {
                 .build();
     }
 
+    @Transactional
     public AuthenticationResponse authenticate(AuthenticationRequestDto request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(),request.password()));
         User user = userRepository.findByEmail(request.email())

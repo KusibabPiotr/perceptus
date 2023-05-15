@@ -1,13 +1,14 @@
 package com.perceptus.library.service;
 
+import com.perceptus.library.exceptions.EmailNotFoundException;
+import com.perceptus.library.exceptions.PasswordNotMatchException;
 import com.perceptus.library.mapper.RegistrationRequestMapper;
 import com.perceptus.library.model.domain.*;
 import com.perceptus.library.model.dto.AuthenticationRequestDto;
 import com.perceptus.library.model.dto.RegisterRequestDto;
 import com.perceptus.library.repository.TokenRepository;
 import com.perceptus.library.repository.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.perceptus.library.validation.PasswordEqualityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -22,12 +23,16 @@ import java.util.Optional;
 
 import static com.perceptus.library.model.domain.TokenType.BEARER;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class AuthenticationServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PasswordEqualityValidator validator;
 
     @Mock
     private TokenRepository tokenRepository;
@@ -41,12 +46,6 @@ class AuthenticationServiceTest {
     @Mock
     private AuthenticationManager authenticationManager;
 
-    @Mock
-    private HttpServletRequest httpServletRequest;
-
-    @Mock
-    private HttpServletResponse httpServletResponse;
-
     @InjectMocks
     private AuthenticationService authenticationService;
 
@@ -59,7 +58,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void testRegister() {
+    void testRegisterOk() {
         // Given
         RegisterRequestDto registerRequestDto = new RegisterRequestDto("Adam","Kacz","test@gmail.com", "password123", "password123");
         User user = new User(1, "Adam","Kacz","test@gmail.com", "password123",Role.USER, new ArrayList<>());
@@ -74,6 +73,7 @@ class AuthenticationServiceTest {
         when(mapper.mapRegistrationRequestToUser(registerRequestDto)).thenReturn(user);
         when(userRepository.save(user)).thenReturn(user);
         when(jwtService.generateToken(user)).thenReturn(accessToken, refreshToken);
+        when(validator.validate(registerRequestDto.password(),registerRequestDto.repeatPassword())).thenReturn(true);
 
         // When
         AuthenticationResponse authenticationResponse = authenticationService.register(registerRequestDto);
@@ -92,7 +92,20 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void testAuthenticate() {
+    void testRegisterPasswordNotMatch() {
+        // Given
+        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Adam","Kacz","test@gmail.com", "password1234", "password123");
+        when(validator.validate(registerRequestDto.password(),registerRequestDto.repeatPassword())).thenThrow(PasswordNotMatchException.class);
+
+        // When&then
+        assertThrows(PasswordNotMatchException.class, () -> {
+            authenticationService.register(registerRequestDto);
+        });
+
+    }
+
+    @Test
+    void testAuthenticateOk() {
         // Given
         AuthenticationRequestDto authenticationRequestDto = new AuthenticationRequestDto("test@gmail.com", "password123");
         User user = new User(1, "Adam","Kacz","test@gmail.com", "password123",Role.USER, new ArrayList<>());
@@ -123,6 +136,19 @@ class AuthenticationServiceTest {
         verify(tokenRepository, times(1)).save(any(Token.class));
         verify(tokenRepository, times(1)).findAllValidTokenByUser(user.getId());
         assertThat(authenticationResponse).isEqualToComparingFieldByField(expectedResponse);
+    }
+
+    @Test
+    void testAuthenticateEmailNotFound() {
+        // Given
+        AuthenticationRequestDto authenticationRequestDto = new AuthenticationRequestDto("test@gmail.com", "password123");
+        when(userRepository.findByEmail("test@gmail.com")).thenThrow(EmailNotFoundException.class);
+        when(authenticationManager.authenticate(any())).thenReturn(null);
+
+        // When&then
+        assertThrows(EmailNotFoundException.class, () -> {
+            authenticationService.authenticate(authenticationRequestDto);
+        });
     }
 }
 
