@@ -12,30 +12,30 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyAuthority('ADMIN','USER','MANAGER')")
 public class LibraryController {
     private final LibraryService service;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER','MANAGER')")
     public ResponseEntity<List<BookDto>> getBooks() {
         return ResponseEntity.ok(service.getBooks());
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('admin:create','management:create')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseEntity<BookDto> saveBook(@RequestBody BookDto dto) {
         return ResponseEntity.ok(service.saveBook(dto));
     }
 
-    @PutMapping("/bookId")
-    @PreAuthorize("hasAnyAuthority('admin:update','management:update')")
-    public ResponseEntity<BookDto> updateBook(@PathVariable Long bookId, @RequestBody BookDto dto) {
+    @PutMapping("/{bookId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    public ResponseEntity<BookDto> updateBook(@PathVariable(name = "bookId") Long bookId, @RequestBody BookDto dto) {
         return ResponseEntity.ok(service.updateBook(bookId, dto));
     }
 
-    @DeleteMapping("/bookId")
-    @PreAuthorize("hasAnyAuthority('admin:delete','management:delete')")
-    public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
+    @DeleteMapping("/{bookId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> deleteBook(@PathVariable(name = "bookId") Long bookId) {
         service.deleteBook(bookId);
         return ResponseEntity.status(200).build();
     }

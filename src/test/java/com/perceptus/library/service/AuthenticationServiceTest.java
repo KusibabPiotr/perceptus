@@ -76,19 +76,16 @@ class AuthenticationServiceTest {
         when(validator.validate(registerRequestDto.password(),registerRequestDto.repeatPassword())).thenReturn(true);
 
         // When
-        AuthenticationResponse authenticationResponse = authenticationService.register(registerRequestDto);
+         authenticationService.register(registerRequestDto);
 
         // Then
         verify(userRepository, times(1)).save(user);
         verify(jwtService, times(2)).generateToken(user);
-        assertThat(authenticationResponse.getAccessToken()).isEqualTo(accessToken);
-        assertThat(authenticationResponse.getRefreshToken()).isEqualTo(refreshToken);
         verify(tokenRepository, times(1)).save(tokenArgumentCaptor.capture());
         assertThat(tokenArgumentCaptor.getValue().getToken()).isEqualTo(accessToken);
         assertThat(tokenArgumentCaptor.getValue().getTokenType()).isEqualTo(BEARER);
         assertThat(tokenArgumentCaptor.getValue().isExpired()).isFalse();
         assertThat(tokenArgumentCaptor.getValue().isRevoked()).isFalse();
-        assertThat(authenticationResponse).isEqualToComparingFieldByField(expectedResponse);
     }
 
     @Test

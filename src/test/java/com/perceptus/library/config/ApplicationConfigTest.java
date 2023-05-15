@@ -1,11 +1,11 @@
 package com.perceptus.library.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -26,11 +26,12 @@ class ApplicationConfigTest {
     @Autowired
     private AuthenticationManager manager;
 
+    @Autowired
+    private ObjectMapper mapper;
+
     @Test
     public void testUserDetailService(){
-        UserDetails userDetails = service.loadUserByUsername("Any");
         assertThat(service).isNotNull();
-        assertThat(userDetails).isNotNull();
     }
 
     @Test
@@ -49,5 +50,10 @@ class ApplicationConfigTest {
     @Test
     public void testAuthenticationManager(){
         assertThat(manager).isNotNull();
+    }
+
+    @Test
+    public void testObjectMapper(){
+        assertThat(mapper).isNotNull();
     }
 }

@@ -36,9 +36,8 @@ class AuthenticationControllerTest {
 
     @Test
     void testRegisterEndpointOk() throws Exception {
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse("access_token", "refresh_token");
         RegisterRequestDto request = new RegisterRequestDto("anna", "maria","anna@op.pl","Anna1234!","Anna1234!");
-        when(authenticationService.register(any(RegisterRequestDto.class))).thenReturn(authenticationResponse);
+        when(authenticationService.register(any(RegisterRequestDto.class))).thenReturn("Successfull registration!");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)

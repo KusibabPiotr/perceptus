@@ -3,6 +3,7 @@ package com.perceptus.library.service;
 import com.perceptus.library.model.domain.AuthenticationResponse;
 import com.perceptus.library.model.domain.Role;
 import com.perceptus.library.model.domain.User;
+import com.perceptus.library.model.dto.AuthenticationRequestDto;
 import com.perceptus.library.model.dto.RegisterRequestDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -28,7 +29,8 @@ class JwtServiceTest {
     public void testExtractToken(){
         //given
         RegisterRequestDto registerRequestDto = new RegisterRequestDto("Adam","Kacz","test9@gmail.com", "password123", "password123");
-        AuthenticationResponse registered = authenticationService.register(registerRequestDto);
+        authenticationService.register(registerRequestDto);
+        AuthenticationResponse registered = authenticationService.authenticate(new AuthenticationRequestDto("test9@gmail.com", "password123"));
         //when
         String username = jwtService.extractUsername(registered.getAccessToken());
         //then
@@ -39,7 +41,8 @@ class JwtServiceTest {
     public void testExtractClaim(){
         //given
         RegisterRequestDto registerRequestDto = new RegisterRequestDto("Adam","Kacz","test@gmail.com", "password123", "password123");
-        AuthenticationResponse registered = authenticationService.register(registerRequestDto);
+        authenticationService.register(registerRequestDto);
+        AuthenticationResponse registered = authenticationService.authenticate(new AuthenticationRequestDto("test@gmail.com", "password123"));
         //when
         String username = jwtService.extractClaim(registered.getAccessToken(), Claims::getSubject);
         //then
