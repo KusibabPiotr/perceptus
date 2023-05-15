@@ -1,7 +1,7 @@
 package com.perceptus.library.security.filter;
 
-import com.perceptus.library.repository.TokenRepository;
-import com.perceptus.library.service.JwtService;
+import com.perceptus.library.repositories.TokenRepository;
+import com.perceptus.library.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.perceptus.library.model.Constants.BEARER;
+import static com.perceptus.library.models.Constants.BEARER;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Component

@@ -1,7 +1,7 @@
 package com.perceptus.library.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.perceptus.library.repository.UserRepository;
+import com.perceptus.library.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
