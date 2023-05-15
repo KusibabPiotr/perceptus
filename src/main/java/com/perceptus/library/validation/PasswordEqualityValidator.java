@@ -5,10 +5,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PasswordEqualityValidator {
-    public void validate(final String password, final String repeatedPassword)
+    public boolean validate(final String password, final String repeatedPassword)
             throws PasswordNotMatchException {
         if (!test(password, repeatedPassword)) {
             throw new PasswordNotMatchException();
+        } else {
+            return true;
         }
     }
     boolean test(final String password, final String repeatedPassword) {
