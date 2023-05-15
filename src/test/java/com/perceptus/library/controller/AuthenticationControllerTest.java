@@ -5,8 +5,6 @@ import com.perceptus.library.model.domain.AuthenticationResponse;
 import com.perceptus.library.model.dto.AuthenticationRequestDto;
 import com.perceptus.library.model.dto.RegisterRequestDto;
 import com.perceptus.library.service.AuthenticationService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +17,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,7 +44,7 @@ class AuthenticationControllerTest {
 
     @Test
     void testAuthenticateEndpointOk() throws Exception {
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse("access_token", "refresh_token");
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse("access_token");
         AuthenticationRequestDto request = new AuthenticationRequestDto("testuser", "testpassword");
         when(authenticationService.authenticate(any(AuthenticationRequestDto.class))).thenReturn(authenticationResponse);
 
@@ -55,17 +52,6 @@ class AuthenticationControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(request)))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    void testRefreshTokenEndpointOk() throws Exception {
-        HttpServletRequest request = null;
-        HttpServletResponse response = null;
-        doNothing().when(authenticationService).refreshToken(request, response);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/refresh-token"))
-                .andExpect(status().isOk())
-                .andReturn();
     }
 
     @BeforeEach

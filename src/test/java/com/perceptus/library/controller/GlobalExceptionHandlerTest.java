@@ -1,6 +1,5 @@
 package com.perceptus.library.controller;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -38,7 +37,6 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
-    @DisplayName("Test email not found exception handler")
     public void testEmailNotFoundExceptionHandler() {
         //given&when
         ResponseEntity<String> response = handler.handleEmailNotFoundException();
@@ -49,7 +47,6 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
-    @DisplayName("Test password not match exception handler")
     public void testPasswordNotMatchExceptionHandler() {
         //given&when
         ResponseEntity<String> response = handler.handlePasswordNotMatchException();
@@ -60,7 +57,6 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
-    @DisplayName("Test method argument not valid exception handler")
     public void testMethodArgumentNotValidExceptionHandler() {
         GlobalExceptionHandler exceptionHandler = new GlobalExceptionHandler();
         BindingResult bindingResult = new BeanPropertyBindingResult(new Object(), "object");

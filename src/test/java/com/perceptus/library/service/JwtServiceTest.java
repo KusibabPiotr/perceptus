@@ -1,10 +1,7 @@
 package com.perceptus.library.service;
 
-import com.perceptus.library.model.domain.AuthenticationResponse;
 import com.perceptus.library.model.domain.Role;
 import com.perceptus.library.model.domain.User;
-import com.perceptus.library.model.dto.AuthenticationRequestDto;
-import com.perceptus.library.model.dto.RegisterRequestDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -22,37 +19,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JwtServiceTest {
     @Autowired
     private JwtService jwtService;
-    @Autowired
-    private AuthenticationService authenticationService;
 
     @Test
-    public void testExtractToken(){
+    public void testUsernameToken(){
         //given
-        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Adam","Kacz","test9@gmail.com", "password123", "password123");
-        authenticationService.register(registerRequestDto);
-        AuthenticationResponse registered = authenticationService.authenticate(new AuthenticationRequestDto("test9@gmail.com", "password123"));
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZWxsb1RhdGFyQG9wLnBsIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlVTRVIifV0sImlhdCI6MTY4NDE1OTE2MCwiZXhwIjoxNjg0MjQ1NTYwfQ.IRrmJ-IiLsspf4xf_rOsgVDEVLijgT_zBxgCetxbKFU";
         //when
-        String username = jwtService.extractUsername(registered.getAccessToken());
+        String username = jwtService.extractUsername(token);
         //then
-        assertThat(username).isEqualTo("test9@gmail.com");
+        assertThat(username).isEqualTo("helloTatar@op.pl");
     }
 
     @Test
     public void testExtractClaim(){
         //given
-        RegisterRequestDto registerRequestDto = new RegisterRequestDto("Adam","Kacz","test@gmail.com", "password123", "password123");
-        authenticationService.register(registerRequestDto);
-        AuthenticationResponse registered = authenticationService.authenticate(new AuthenticationRequestDto("test@gmail.com", "password123"));
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZWxsb1RhdGFyQG9wLnBsIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlVTRVIifV0sImlhdCI6MTY4NDE1OTE2MCwiZXhwIjoxNjg0MjQ1NTYwfQ.IRrmJ-IiLsspf4xf_rOsgVDEVLijgT_zBxgCetxbKFU";
         //when
-        String username = jwtService.extractClaim(registered.getAccessToken(), Claims::getSubject);
+        String username = jwtService.extractClaim(token, Claims::getSubject);
         //then
-        assertThat(username).isEqualTo("test@gmail.com");
+        assertThat(username).isEqualTo("helloTatar@op.pl");
     }
 
     @Test
     public void testGenerateToken(){
         //given
-        User user = new User(1, "Adam","Kacz","test@gmail.com", "password123", Role.USER, new ArrayList<>());
+        User user = new User(9, "Adam","Kacz","test@gmail.com", "password123", Role.USER, new ArrayList<>());
         //when
         String token = jwtService.generateToken(user);
         //then
@@ -64,7 +55,7 @@ class JwtServiceTest {
         //given
         Map<String, Object> map = new HashMap<>();
         map.put("my","my");
-        User user = new User(1, "Adam","Kacz","test@gmail.com", "password123", Role.USER, new ArrayList<>());
+        User user = new User(8, "Adam","Kacz","test@gmail.com", "password123", Role.USER, new ArrayList<>());
         //when
         String token = jwtService.generateToken(map,user);
         Claims body = Jwts
@@ -81,7 +72,7 @@ class JwtServiceTest {
     @Test
     public void testIsTokenValidTrue(){
         //given
-        User user = new User(1, "Adam","Kacz","test@gmail.com", "password123", Role.USER, new ArrayList<>());
+        User user = new User(6, "Adam","Kacz","test@gmail.com", "password123", Role.USER, new ArrayList<>());
         String token = jwtService.generateToken(user);
         //when
         boolean tokenValid = jwtService.isTokenValid(token, user);
@@ -93,8 +84,7 @@ class JwtServiceTest {
     @Test
     public void testIsTokenValidFalse(){
         //given
-        User user = new User(1, "Adam","Kacz","test@gmail.com", "password123", Role.USER, new ArrayList<>());
-        User user1 = new User(1, "Anna","Kaczak","test123@gmail.com", "password1234", Role.USER, new ArrayList<>());
+        User user = new User(5, "Adam","Kacz","test@gmail.com", "password123", Role.USER, new ArrayList<>());
         String token = jwtService.generateToken(user);
         //when
         boolean tokenValid = jwtService.isTokenValid(token, user);

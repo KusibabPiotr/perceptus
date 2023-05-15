@@ -63,16 +63,10 @@ class AuthenticationServiceTest {
         RegisterRequestDto registerRequestDto = new RegisterRequestDto("Adam","Kacz","test@gmail.com", "password123", "password123");
         User user = new User(1, "Adam","Kacz","test@gmail.com", "password123",Role.USER, new ArrayList<>());
         String accessToken = "accessToken";
-        String refreshToken = "refreshToken";
-
-        AuthenticationResponse expectedResponse = AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
 
         when(mapper.mapRegistrationRequestToUser(registerRequestDto)).thenReturn(user);
         when(userRepository.save(user)).thenReturn(user);
-        when(jwtService.generateToken(user)).thenReturn(accessToken, refreshToken);
+        when(jwtService.generateToken(user)).thenReturn(accessToken);
         when(validator.validate(registerRequestDto.password(),registerRequestDto.repeatPassword())).thenReturn(true);
 
         // When
@@ -80,7 +74,7 @@ class AuthenticationServiceTest {
 
         // Then
         verify(userRepository, times(1)).save(user);
-        verify(jwtService, times(2)).generateToken(user);
+        verify(jwtService, times(1)).generateToken(user);
         verify(tokenRepository, times(1)).save(tokenArgumentCaptor.capture());
         assertThat(tokenArgumentCaptor.getValue().getToken()).isEqualTo(accessToken);
         assertThat(tokenArgumentCaptor.getValue().getTokenType()).isEqualTo(BEARER);
@@ -111,7 +105,6 @@ class AuthenticationServiceTest {
 
         AuthenticationResponse expectedResponse = AuthenticationResponse.builder()
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
                 .build();
 
         when(userRepository.findByEmail("test@gmail.com")).thenReturn(Optional.of(user));
@@ -126,10 +119,9 @@ class AuthenticationServiceTest {
 
         // Then
         assertThat(authenticationResponse.getAccessToken()).isEqualTo(accessToken);
-        assertThat(authenticationResponse.getRefreshToken()).isEqualTo(refreshToken);
         verify(userRepository, times(1)).findByEmail("test@gmail.com");
         verify(authenticationManager, times(1)).authenticate(any());
-        verify(jwtService, times(2)).generateToken(user);
+        verify(jwtService, times(1)).generateToken(user);
         verify(tokenRepository, times(1)).save(any(Token.class));
         verify(tokenRepository, times(1)).findAllValidTokenByUser(user.getId());
         assertThat(authenticationResponse).isEqualToComparingFieldByField(expectedResponse);
