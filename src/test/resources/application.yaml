@@ -23,5 +23,10 @@ application:
     jwt:
       secret-key: 763979244226452948404D635166546A576E5A7234753778217A25432A462D4A
       expiration: 86400000 # a day
-      refreshToken:
-        expiration: 604800000 # 7 days
+
+openweathermap:
+  api:
+    key: ecb50481b265872817c44b68d5c142d5
+  now:
+    endpoint: http://api.openweathermap.org/data/2.5/weather
+    city: Warsaw

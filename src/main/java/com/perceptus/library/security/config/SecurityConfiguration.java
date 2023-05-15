@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
+                        "/v1/weather/getNow",
                         "/api/v1/auth/**",
                         "/v2/api-docs",
                         "/v3/api-docs",

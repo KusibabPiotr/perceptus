@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,6 +29,9 @@ class ApplicationConfigTest {
 
     @Autowired
     private ObjectMapper mapper;
+
+    @Autowired
+    private RestTemplate template;
 
     @Test
     public void testUserDetailService(){
@@ -55,5 +59,10 @@ class ApplicationConfigTest {
     @Test
     public void testObjectMapper(){
         assertThat(mapper).isNotNull();
+    }
+
+    @Test
+    public void testRestTemplate(){
+        assertThat(template).isNotNull();
     }
 }
