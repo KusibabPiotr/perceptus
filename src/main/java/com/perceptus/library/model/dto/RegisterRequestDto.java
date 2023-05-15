@@ -7,9 +7,13 @@ import lombok.Builder;
 
 @Builder
 public record RegisterRequestDto(
+        @NotNull(message = "This field must not be empty!")
+        @Pattern(regexp = "^[A-Za-z]+$", message = "Use alphabetic letters! No numbers,whitespaces and special allowed!")
         String firstName,
+        @NotNull(message = "This field must not be empty!")
+        @Pattern(regexp = "^[A-Za-z]+$", message = "Use alphabetic letters! No numbers, whitespaces and special allowed!")
         String lastName,
-        @Email(regexp = "^(.+)@(\\S+)$", message = "You have to provide right email format!")
+        @Email(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "You have to provide right email format!")
         @NotNull(message = "This field must not be empty!")
         String email,
         @NotNull(message = "This field must not be empty!")
@@ -17,6 +21,5 @@ public record RegisterRequestDto(
         String password,
         @NotNull(message = "This field must not be empty!")
         String repeatPassword
-//        Role role
 ) {
 }
