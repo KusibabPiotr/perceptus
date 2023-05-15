@@ -3,6 +3,7 @@ package com.perceptus.library.weather.controller;
 import com.perceptus.library.weather.dto.OutputWeatherDto;
 import com.perceptus.library.weather.service.WeatherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,7 @@ public class WeatherController {
     private final WeatherService weatherService;
 
     @GetMapping("/getNow")
-    public OutputWeatherDto getWeatherForNow(){
-        return weatherService.getDataFromApi();
+    public ResponseEntity<OutputWeatherDto> getWeatherForNow(){
+        return ResponseEntity.ok(weatherService.getDataFromApi());
     }
 }

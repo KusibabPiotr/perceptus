@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class WeatherService {
-
     private final WeatherClient weatherClient;
 
     public OutputWeatherDto getDataFromApi(){
