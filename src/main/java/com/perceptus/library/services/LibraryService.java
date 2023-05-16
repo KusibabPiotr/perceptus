@@ -7,17 +7,20 @@ import com.perceptus.library.models.dto.BookDto;
 import com.perceptus.library.repositories.LibraryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class LibraryService {
     private final LibraryRepository repository;
     private final BookMapper mapper;
-    public List<BookDto> getBooks() {
-        return repository.findAll().stream().map(mapper::mapBookToDto).toList();
+    public Page<BookDto> getBooks(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return new PageImpl<>(repository.findAll(pageable).stream().map(mapper::mapBookToDto).toList());
     }
 
     public BookDto saveBook(final BookDto dto) {

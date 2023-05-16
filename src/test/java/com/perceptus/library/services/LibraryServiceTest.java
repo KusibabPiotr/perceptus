@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -34,9 +38,10 @@ class LibraryServiceTest {
         List<Book> list = new ArrayList<>();
         Book book = new Book(1L,"Title", "Author");
         list.add(book);
-        when(repository.findAll()).thenReturn(list);
+        PageImpl<Book> bookPage = new PageImpl<>(list, PageRequest.of(0, 5), list.size());
+        when(repository.findAll((Pageable) any())).thenReturn(bookPage);
         //when
-        List<BookDto> books = service.getBooks();
+        Page<BookDto> books = service.getBooks(0,5);
         //then
         assertThat(books).hasSize(1);
     }
@@ -100,8 +105,7 @@ class LibraryServiceTest {
         service.saveBook(bookDto);
         repository.deleteById(2L);
 
-        List<BookDto> books = service.getBooks();
-        books.forEach(System.out::println);
+        Page<BookDto> books = service.getBooks(0,5);
 
         //when&then
         verify(repository,times(1)).deleteById(2L);
